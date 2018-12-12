@@ -1,0 +1,520 @@
+
+
+
+/*
+
+/*
+                                                                          +
+                                                                        /  |
+****** ***** ***** ******* *----- *******  *----*  *-----*  *-----*    /   |
+|    | |   | |   |    |    |         |     |    |  |     |  |     |   /    |
+*****  |   | |   |    |    *----*    |     |*---*  |-----*  *-----*  /     |
+|    | |   | |   |    |         |    |     |  \    |     |  |       +------+
+****** ***** *****    |    *----*    |     |   \   |     |  |              +.1
+
+https://github.com/silvicardo
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+*/
+
+/************************************************/
+/* BOOTSTRAP 4 GRID BREAKPOINTS */
+/************************************************/
+
+/*
+Extra small <576px    .col-     Max container width AUTO
+Small ≥576px          .col-sm- Max container width 540px
+Medium ≥768px         .col-md- Max container width 720px
+Large ≥992px          .col-lg- Max container width 960px
+Extra large ≥1200px   .col-xl- Max container width 1140px
+*/
+
+
+/************************************************/
+/* REGOLE GENERALI */
+/************************************************/
+
+img {
+  max-width: 100%;
+}
+
+a, a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+li {
+  list-style: none;
+}
+
+/************************************************/
+/*FLEXBOX Classes */
+/************************************************/
+
+/*
+
+BOOTSTRAP 4.1 FLEXBOX Classes
+
+DISPLAY
+.d-flex
+.d-inline-flex
+.d-sm-flex
+.d-sm-inline-flex
+.d-md-flex
+.d-md-inline-flex
+.d-lg-flex
+.d-lg-inline-flex
+.d-xl-flex
+.d-xl-inline-flex
+
+FLEX DIRECTION
+
+.flex-row
+.flex-row-reverse
+.flex-column
+.flex-column-reverse
+.flex-sm-row
+.flex-sm-row-reverse
+.flex-sm-column
+.flex-sm-column-reverse
+.flex-md-row
+.flex-md-row-reverse
+.flex-md-column
+.flex-md-column-reverse
+.flex-lg-row
+.flex-lg-row-reverse
+.flex-lg-column
+.flex-lg-column-reverse
+.flex-xl-row
+.flex-xl-row-reverse
+.flex-xl-column
+.flex-xl-column-reverse
+
+
+JUSTIFY CONTENT(Main-Axis)
+
+.justify-content-start
+.justify-content-end
+.justify-content-center
+.justify-content-between
+.justify-content-around
+.justify-content-sm-start
+.justify-content-sm-end
+.justify-content-sm-center
+.justify-content-sm-between
+.justify-content-sm-around
+.justify-content-md-start
+.justify-content-md-end
+.justify-content-md-center
+.justify-content-md-between
+.justify-content-md-around
+.justify-content-lg-start
+.justify-content-lg-end
+.justify-content-lg-center
+.justify-content-lg-between
+.justify-content-lg-around
+.justify-content-xl-start
+.justify-content-xl-end
+.justify-content-xl-center
+.justify-content-xl-between
+.justify-content-xl-around
+
+ALIGN ITEMS (Cross-Axis)
+
+.align-items-start
+.align-items-end
+.align-items-center
+.align-items-baseline
+.align-items-stretch
+.align-items-sm-start
+.align-items-sm-end
+.align-items-sm-center
+.align-items-sm-baseline
+.align-items-sm-stretch
+.align-items-md-start
+.align-items-md-end
+.align-items-md-center
+.align-items-md-baseline
+.align-items-md-stretch
+.align-items-lg-start
+.align-items-lg-end
+.align-items-lg-center
+.align-items-lg-baseline
+.align-items-lg-stretch
+.align-items-xl-start
+.align-items-xl-end
+.align-items-xl-center
+.align-items-xl-baseline
+.align-items-xl-stretch
+
+ALIGN SELF (Cross-Axis Single Item Alignment)
+
+.align-self-start
+.align-self-end
+.align-self-center
+.align-self-baseline
+.align-self-stretch
+.align-self-sm-start
+.align-self-sm-end
+.align-self-sm-center
+.align-self-sm-baseline
+.align-self-sm-stretch
+.align-self-md-start
+.align-self-md-end
+.align-self-md-center
+.align-self-md-baseline
+.align-self-md-stretch
+.align-self-lg-start
+.align-self-lg-end
+.align-self-lg-center
+.align-self-lg-baseline
+.align-self-lg-stretch
+.align-self-xl-start
+.align-self-xl-end
+.align-self-xl-center
+.align-self-xl-baseline
+.align-self-xl-stretch
+
+FLEX FILL (Apply to all child elements for equal width)
+
+.flex-fill
+.flex-sm-fill
+.flex-md-fill
+.flex-lg-fill
+.flex-xl-fill
+
+FLEX SHRINK/GROW (GROW = 1 can't grow; SHRINK = 1 can shrink)
+
+.flex-{grow|shrink}-0
+.flex-{grow|shrink}-1
+.flex-sm-{grow|shrink}-0
+.flex-sm-{grow|shrink}-1
+.flex-md-{grow|shrink}-0
+.flex-md-{grow|shrink}-1
+.flex-lg-{grow|shrink}-0
+.flex-lg-{grow|shrink}-1
+.flex-xl-{grow|shrink}-0
+.flex-xl-{grow|shrink}-1
+
+FLEX WRAP (Wrap = Multiple Lines Container)
+
+.flex-nowrap
+.flex-wrap
+.flex-wrap-reverse
+.flex-sm-nowrap
+.flex-sm-wrap
+.flex-sm-wrap-reverse
+.flex-md-nowrap
+.flex-md-wrap
+.flex-md-wrap-reverse
+.flex-lg-nowrap
+.flex-lg-wrap
+.flex-lg-wrap-reverse
+.flex-xl-nowrap
+.flex-xl-wrap
+.flex-xl-wrap-reverse
+
+FLEX ALIGN CONTENT (Requires FlexWrap!)
+
+Apply to FlexContainer! Aligns elements on the crossAxis)
+<div class="d-flex align-content-start flex-wrap">
+
+.align-content-start
+.align-content-end
+.align-content-center
+.align-content-around
+.align-content-stretch
+.align-content-sm-start
+.align-content-sm-end
+.align-content-sm-center
+.align-content-sm-around
+.align-content-sm-stretch
+.align-content-md-start
+.align-content-md-end
+.align-content-md-center
+.align-content-md-around
+.align-content-md-stretch
+.align-content-lg-start
+.align-content-lg-end
+.align-content-lg-center
+.align-content-lg-around
+.align-content-lg-stretch
+.align-content-xl-start
+.align-content-xl-end
+.align-content-xl-center
+.align-content-xl-around
+.align-content-xl-stretch
+
+  */
+
+
+/************************************************/
+/*POSITIONING */
+/************************************************/
+
+/* BOOTSTRAP 4 POSITIONING CLASSES
+
+position-relative
+
+*/
+
+.positionAbsolute_topLeft {
+  position: absolute;
+  top:0;
+  left:0;
+}
+.positionAbsolute_topRight {
+  position: absolute;
+  top:0;
+  right:0;
+}
+.positionAbsolute_center {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.positionAbsolute_centerLeft {
+  position:absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.positionAbsolute_centerRight {
+  position:absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+.positionAbsolute_bottomLeft {
+  position:absolute;
+  bottom: 0;
+  left: 0;
+}
+.positionAbsolute_bottomRight {
+  position:absolute;
+  bottom:0;
+  right: 0;
+}
+.overlay {
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+/************************************************/
+/* BACKGROUNDS */
+/************************************************/
+
+.bg_red {
+  background: red;
+}
+.bg_black {
+  background: black;
+}
+.bg_grey {
+  background: grey;
+}
+.bg_yellow {
+  background: yellow;
+}
+.bg_aqua {
+  background-color: #17B491;
+}
+.bg_white {
+  background:white;
+}
+.bg_blue {
+  background: blue;
+}
+.bg_lightCoral {
+  background: lightcoral;
+}
+.bg_orange {
+  background: orange;
+}
+
+/************************************************/
+/* TEXT COLORS - Including Hover ONLY classes */
+/************************************************/
+
+
+.black_text {
+  color: black;
+}
+.white_text {
+  color: white;
+}
+.red_text {
+  color: red;
+}
+.yellow_text {
+  color:yellow;
+}
+.blue_text {
+  color: blue;
+}
+.orange_text {
+  color: orange;
+}
+
+.black_text_onHover:hover {
+  color: black;
+}
+.white_text_onHover:hover {
+  color: white;
+}
+.red_text_onHover:hover {
+  color: red;
+}
+.yellow_text_onHover:hover {
+  color:yellow;
+}
+.blue_text_onHover:hover {
+  color: blue;
+}
+.orange_text_onHover:hover {
+  color:orange
+}
+
+.fontSize_10 {
+  font-size: 10px;
+}
+.fontSize_15 {
+  font-size: 15px;
+}
+.fontSize_20 {
+  font-size: 20px;
+}
+.fontSize_25 {
+  font-size: 25px;
+}
+.fontSize_30 {
+  font-size: 30px;
+}
+.fontSize_40 {
+  font-size: 40px;
+}
+.fontSize_50 {
+  font-size: 50px;
+}
+.fontSize_60 {
+  font-size: 60px;
+}
+.fontSize_70 {
+  font-size: 70px;
+}
+.fontSize_80 {
+  font-size: 80px;
+}
+.fontSize_90 {
+  font-size: 90px;
+}
+.fontSize_100 {
+  font-size: 100px;
+}
+
+/* ELEMENTI */
+
+.is_rounded {
+  border-radius: 100%;
+}
+
+.unstyledForm {
+  /* styled elements based on classic
+  Bootstrap Form elememnts below */
+}
+
+.unstyledForm .form-control {
+  border: 0;
+  box-shadow: none;
+  font-size: 30px;
+}
+
+.unstyledForm .form-group textarea {
+  resize: none;
+}
+
+.unstyledForm .form-group {
+  margin-bottom: 30px;
+}
+
+.unstyledForm .form-control:focus {
+  box-shadow: none;
+}
+
+/* CSS TRANSITIONS + ANIMATIONS */
+
+.transition_o2s {
+  transition: 0.2s;
+}
+.transition_o3s {
+  transition: 0.3s;
+}
+.transition_o4s {
+  transition: 0.4s;
+}
+.transition_o5s {
+  transition: 0.5s;
+}
+.transition_1s {
+  transition: 1s;
+}
+
+.rotate_once {
+  animation: rotateOnce 1s linear;
+}
+
+@keyframes rotateOnce {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+.rotate_infinite {
+  animation: rotateOnce 1s linear infinite;
+}
+
+@keyframes rotateOnce {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+.whiteOnHover:hover {
+  /* to apply on images */
+  transition: 0.3s;
+  filter: brightness(0) invert(1);
+}
+
+/* TEST SHAPES */
+
+.box20 {
+  height:20%;
+  width:20%;
+}
+
+.rectangle20_40 {
+  height:20%;
+  width: 40%;
+}
+
+.circle20 {
+  height:150px;
+  width:150px;
+  border-radius: 100%;
+}

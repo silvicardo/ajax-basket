@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="Bootstrap4_1Extension.css">
+  <link rel="stylesheet" href="style.css">
+  <title>javascriptBasket</title>
+</head>
+<body>
+
+  <div id="main-container">
+
+    <header >
+      <i class="fas fa-basketball-ball"></i>
+      <h1 class="white_text">TOP 100 <span>PLAYERS DATABASE<span></h1>
+      <img src="hamburger.svg" class="positionAbsolute_centerRight">
+    </header>
+
+    <div class="controls_area">
+      <div class="searchBar">
+        <input id="searchInput" type="text" placeholder="Digita id giocatore da trovare" value="">
+        <i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="full_database" id="db">
+        <!-- Handlebars template -->
+        <script id="db_list_player_template" type="text/x-handlebars-template">
+          <div class="player_card">
+            <div class="card_header">
+              <div class="player_id">
+                <h2 class="">ID GIOCATORE: {{ id }}</h2>
+              </div>
+            </div>
+          </div>
+        </script>
+      </div>
+
+      <div id="result_area">
+
+        <!-- Handlebars template -->
+        <script id="player_found" type="text/x-handlebars-template">
+          <div class="player_card">
+          <div class="card_header">
+            <div class="player_id">
+              <h2 class="">ID GIOCATORE: {{ id }}</h2>
+            </div>
+          </div>
+          <div class="card_body">
+            <ul class="player_stats player_XYF500">
+              <li><span class="stat_key">rimbalzi :</span> {{ rimbalzi }}</li>
+              <li><span class="stat_key">falli :</span> {{ falli }}</li>
+              <li><span class="stat_key">punteggio Partita :</span> {{ punteggioPartita }}</li>
+              <li><span class="stat_key">tiri Da 3 Riusciti :</span> {{ tiriDa3Riusciti }}</li>
+              <li><span class="stat_key">tiri Da 2 Riusciti :</span> {{ tiriDa2Riusciti }}</li>
+              <li><span class="stat_key">punti Con Tiri Da 3 Riusciti :</span> {{ puntiConTiriDa3Riusciti }}</li>
+              <li><span class="stat_key">punti Con Tiri Da 2 Riusciti :</span> {{ puntiConTiriDa2Riusciti }}</li>
+              <li><span class="stat_key">percentuale Tiri Da 3 In Partita :</span> {{ percentualeTiriDa3InPartita }}</li>
+              <li><span class="stat_key">percentuale Tiri Da 2 In Partita :</span> {{ percentualeTiriDa2InPartita }}</li>
+            </ul>
+          </div>
+        </div>
+        </script>
+
+        <div class="warning">
+          <h2><i class="fas fa-times"></i>Giocatore non trovato</h2>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js" charset="utf-8"></script>
+  <script src="usefulMethods.js" charset="utf-8"></script>
+  <script src="main.js" charset="utf-8"></script>
+</body>
+</html>
