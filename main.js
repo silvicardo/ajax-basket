@@ -14,240 +14,231 @@ maiuscole casuali e 3 numeri)
 Una volta generato il “database”, il programma deve chiedere
 all’utente di inserire un Codice Giocatore e il programma
 restituisce le statistiche.
+
+JQUERY
+Utilizzare il DB del Basket già creato nell’esercizio
+precedente, per creare un’interfaccia grafica.
+Tutti i giocatori verranno visualizzati tramite il loro
+codice in una sidebar. Una volta cliccato sul codice
+giocatore, nel corpo principale verranno
+visualizzate le statistiche corrispondenti.
+Utilizzare jquery, handlebars e il DB del precedente
+esercizio
+
+AJAX UPDATE (versione corrente);
+Grazie all’utilizzo dell’API e il suo
+URL
+https://www.boolean.careers/api/ar
+ray/basket?n=numberPlayers
+Ricreare l’esercizio del basket,
+questa volta dando la possibilità
+all’utente di scegliere quanti
+giocatori generare per poi stampare
+la lista in una sidebar e vedere le
+statistiche correlate al player
+clicccato
 */
 
 $( document ).ready(function() {
 
-  var databaseGiocatori = generaDatabaseGiocatori(100);
-  //console.log(databaseGiocatori);
+  var numeroGiocatoriStr = prompt('Digita il numero giocatori desiderato');
+  var databasegiocatori = [];
+  var apiUrl = 'https://www.boolean.careers/api/array/basket?n='+ numeroGiocatoriStr;
 
-  caricaUIListaGiocatoriDa(databaseGiocatori);
+  $.ajax({
+    url: apiUrl,
+    method: 'GET',
+    success: function(apiData) {
+      databaseGiocatori = generaDatabaseGiocatoriDa(apiData.response);
+      caricaUIListaGiocatoriDa(databaseGiocatori);
 
-  $('#searchInput').on({
-    keyup: function () {
-      $('.full_database .player_card').removeClass('selected');
-      var idRicerca = $(this).val();
-      if (idRicerca.length == 6) {
-        interroga(databaseGiocatori, idRicerca);
-      } else if (idRicerca.length == 1) {
-          var figliAreaRisultati = ($('#result_area').get(0).childElementCount);
+      $('#searchInput').on({
+        keyup: gestisciDigitazioneBarraDiRicerca,
+        click: gestisciClickSuBarraDiRicerca
+      });
 
-          $('.warning').removeClass('active');
-          if (figliAreaRisultati == 3 ) {
-            $('#result_area > .player_card').remove();
-          }
-      }
+      var giocatoreMostrato;
+
+      $('.full_database .player_card').click(gestisciClickSuListaGiocatori);
     },
-    click: function () {
-      var idRicerca = $(this).val();
-      if (idRicerca.length == 6) {
-        $(this).val('');
-      }
+    error: function(error) {
+      console.log('Errore durante il recupero dei dati');
     }
-  });
+  })
 
-  var giocatoreMostrato;
+});
 
-  $('.full_database .player_card').click(function() {
+// FUNZIONI
 
-    //Recupero l'indice di un eventuale giocatore già toccato in lista
-    giocatoreMostrato = $('.full_database .player_card.selected');
-    var indiceGiocatoreMostrato = $('.full_database .player_card').index(giocatoreMostrato);
+//Gestione della UI
 
-    var giocatoreCliccato = $(this);
-    var indiceGiocatoreCliccato = $('.full_database .player_card').index(giocatoreCliccato);
+function caricaUIListaGiocatoriDa(databaseGiocatori) {
+  var listaGiocatori = $('#db');
 
-    //Se il giocatore è diverso da quello già selezionato
-    //elabora la card
-    if (indiceGiocatoreMostrato != indiceGiocatoreCliccato) {
-      giocatoreMostrato.removeClass('selected');
-      giocatoreCliccato.addClass('selected');
+  for (var i = 0; i < databaseGiocatori.length; i++) {
+    var card = generaCardPerListaDatabaseDa(databaseGiocatori[i]);
+    listaGiocatori.append(card);
+  }
+
+}
+
+function generaCardPerListaDatabaseDa(giocatore) {
+
+  var cardTemplate = $('#db_list_player_template');
+
+  var cardTemplateHtml = cardTemplate.html();
+
+  var template = Handlebars.compile(cardTemplateHtml);
+
+  var data = {
+    id: giocatore.id
+  };
+
+  var htmlRisultato = template(data);
+
+  return htmlRisultato;
+
+}
+
+function generaCard(giocatore) {
+
+  var cardTemplate = $('#player_found');
+
+  var cardTemplateHtml = cardTemplate.html();
+
+  var template = Handlebars.compile(cardTemplateHtml);
+
+  var data = giocatore.statistiche;
+
+  data.id = giocatore['id'];
+
+  var htmlRisultato = template(data);
+
+  return htmlRisultato;
+
+}
+
+//Ricerca Giocatori nel db
+
+function interroga(database, id) {
+
+  var idAdattato = id.toUpperCase();
+
+  var risultatoQuery = databaseContiene(database, idAdattato);
+  if (risultatoQuery == -1) {
+    stampaASchermoErrore();
+  } else {
+    stampaASchermoGiocatoreDa(risultatoQuery, database);
+  }
+  $('#searchInput').val('');
+}
+
+function stampaASchermoErrore() {
+  $('.warning').addClass('active');
+}
+
+function stampaASchermoGiocatoreDa(indice, database) {
+
+  var giocatore = database[indice];
+  var cardGiocatoreTrovato = generaCard(database[indice]);
+  $('#result_area').append(cardGiocatoreTrovato);
+}
+
+function databaseContiene(database, id) {
+
+  for (var i = 0; i < database.length; i++) {
+    if (database[i].id == id) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+//Popolazione lista Giocatori per il db
+
+function generaDatabaseGiocatoriDa(apiData) {
+  var arrayGiocatori = [];
+
+  for (var i = 0; i < apiData.length; i++) {
+    arrayGiocatori.push(generaNuovoOggettoGiocatoreDa(apiData[i]));
+  }
+
+  return arrayGiocatori;
+}
+
+function generaNuovoOggettoGiocatoreDa(giocatoreApi) {
+
+  var nuovoGiocatore = {
+    id: giocatoreApi.playerCode,
+  };
+
+  nuovoGiocatore.statistiche = generaOggettoStatisticheDa(giocatoreApi);
+
+  return nuovoGiocatore;
+}
+
+function generaOggettoStatisticheDa(giocatoreApi) {
+
+  var statistiche = {
+    rimbalzi : giocatoreApi.rebounds,
+    falli : giocatoreApi.fouls,
+    punteggioPartita : giocatoreApi.points,
+    puntiConTiriDa3Riusciti : giocatoreApi.threePoints,
+    puntiConTiriDa2Riusciti : giocatoreApi.twoPoints,
+    tiriDa3Riusciti : giocatoreApi.threePoints / 3,
+    tiriDa2Riusciti : giocatoreApi.twoPoints / 2
+  };
+  var percentualeTiriDa3 = parseInt((100 / giocatoreApi.points) * giocatoreApi.threePoints);
+  statistiche.percentualeTiriDa3Riusciti = percentualeTiriDa3 + '%';
+  statistiche.percentualeTiriDa2Riusciti = (100 - percentualeTiriDa3) + '%';
+
+  return statistiche;
+}
+
+//Funzioni eventi per jQuery
+
+function gestisciClickSuListaGiocatori(){
+  //Recupero l'indice di un eventuale giocatore già toccato in lista
+  giocatoreMostrato = $('.full_database .player_card.selected');
+  var indiceGiocatoreMostrato = $('.full_database .player_card').index(giocatoreMostrato);
+
+  var giocatoreCliccato = $(this);
+  var indiceGiocatoreCliccato = $('.full_database .player_card').index(giocatoreCliccato);
+
+  //Se il giocatore è diverso da quello già selezionato
+  //elabora la card
+  if (indiceGiocatoreMostrato != indiceGiocatoreCliccato) {
+    giocatoreMostrato.removeClass('selected');
+    giocatoreCliccato.addClass('selected');
+    var figliAreaRisultati = ($('#result_area').get(0).childElementCount);
+    if (figliAreaRisultati == 3 ) {
+      $('#result_area > .player_card').remove();
+    }
+    $('.warning').removeClass('active');
+    stampaASchermoGiocatoreDa(indiceGiocatoreCliccato, databaseGiocatori);
+  }
+
+}
+
+function gestisciDigitazioneBarraDiRicerca(){
+  $('.full_database .player_card').removeClass('selected');
+  var idRicerca = $(this).val();
+  if (idRicerca.length == 6) {
+    interroga(databaseGiocatori, idRicerca);
+  } else if (idRicerca.length == 1) {
       var figliAreaRisultati = ($('#result_area').get(0).childElementCount);
+
+      $('.warning').removeClass('active');
       if (figliAreaRisultati == 3 ) {
         $('#result_area > .player_card').remove();
       }
-      $('.warning').removeClass('active');
-      stampaASchermoGiocatoreDa(indiceGiocatoreCliccato, databaseGiocatori);
-    }
-
-  });
-
-  // FUNZIONI
-
-  //Gestione della UI
-
-  function caricaUIListaGiocatoriDa(databaseGiocatori) {
-    var listaGiocatori = $('#db');
-
-    for (var i = 0; i < databaseGiocatori.length; i++) {
-      var card = generaCardPerListaDatabaseDa(databaseGiocatori[i]);
-      listaGiocatori.append(card);
-    }
-
   }
+}
 
-  function generaCardPerListaDatabaseDa(giocatore) {
-
-    var cardTemplate = $('#db_list_player_template');
-
-    var cardTemplateHtml = cardTemplate.html();
-
-    var template = Handlebars.compile(cardTemplateHtml);
-
-    var data = {
-      id: giocatore.id
-    };
-
-    var htmlRisultato = template(data);
-
-    return htmlRisultato;
-
+function gestisciClickSuBarraDiRicerca(){
+  var idRicerca = $(this).val();
+  if (idRicerca.length == 6) {
+    $(this).val('');
   }
-
-  function generaCard(giocatore) {
-
-    var cardTemplate = $('#player_found');
-
-    var cardTemplateHtml = cardTemplate.html();
-
-    var template = Handlebars.compile(cardTemplateHtml);
-
-    var data = giocatore.statistiche;
-
-    data.id = giocatore['id'];
-
-    var htmlRisultato = template(data);
-
-    return htmlRisultato;
-
-  }
-
-  //Ricerca Giocatori nel db
-
-  function interroga(database, id) {
-
-    var idAdattato = id.toUpperCase();
-
-    var risultatoQuery = databaseContiene(database, idAdattato);
-    if (risultatoQuery == -1) {
-      stampaASchermoErrore();
-    } else {
-      stampaASchermoGiocatoreDa(risultatoQuery, database);
-    }
-    $('#searchInput').val('');
-  }
-
-  function stampaASchermoErrore() {
-    $('.warning').addClass('active');
-  }
-
-  function stampaASchermoGiocatoreDa(indice, database) {
-
-    var giocatore = database[indice];
-    var cardGiocatoreTrovato = generaCard(database[indice]);
-    $('#result_area').append(cardGiocatoreTrovato);
-  }
-
-  function databaseContiene(database, id) {
-
-    for (var i = 0; i < database.length; i++) {
-      if (database[i].id == id) {
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  //Generazione Giocatori casuali per il db
-
-  function generaDatabaseGiocatori(nrGiocatori) {
-    var arrayGiocatori = [];
-
-    var arrayId = generaIdCasualiDifferentiPer(nrGiocatori);
-
-    for (var i = 0; i < arrayId.length; i++) {
-      arrayGiocatori.push(generaNuovoOggettoGiocatoreRandomCon(arrayId[i]));
-    }
-
-    return arrayGiocatori;
-  }
-
-  function generaIdCasualiDifferentiPer(totaleId) {
-
-    var arrayId = [];
-
-    while (arrayId.length <= totaleId - 1) {
-      var numeriCasuali = generaNumeroCasualeTra(100, 999);
-      var stringaCasuale = generaStringaConLettereCasuali(3);
-      var idCandidato = stringaCasuale + numeriCasuali;
-      if (arrayId.includes(idCandidato) == false) {
-        arrayId.push(idCandidato);
-      }
-    }
-
-    return arrayId;
-  }
-
-  function generaStringaConLettereCasuali(numeroCaratteri) {
-    var alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z"];
-
-    var stringaRisultato = "";
-
-    for (var i = 0; i < numeroCaratteri; i++) {
-      var stringaCasuale = alfabeto[generaNumeroCasualeTra(0, alfabeto.length - 1)];
-      stringaRisultato += stringaCasuale.toUpperCase();
-    }
-    return stringaRisultato;
-  }
-
-  function generaNuovoOggettoGiocatoreRandomCon(id) {
-
-    var nuovoGiocatore = {
-      id: id,
-    };
-
-    nuovoGiocatore.statistiche = generaOggettoStatistiche();
-
-    return nuovoGiocatore;
-  }
-
-  function generaOggettoStatistiche() {
-
-    var statistiche = {
-      rimbalzi : generaNumeroCasualeTra(1,30), //Numero di rimbalzi
-      falli : generaNumeroCasualeTra(0, 5) //Falli
-    };
-
-    //Creazione restanti parametri delle statistiche
-    var statisticaCreata = false;
-
-    while (statisticaCreata != true) {
-      //Genero Punteggio Totale Casuale
-      statistiche.punteggioPartita = generaNumeroCasualeTra(20,80);
-
-      //Genero una percentuale tiri da 3 riuscita
-      var percentualeTiriDa3Casuale = generaNumeroCasualeTra(30,60);
-
-      //Calcolo punti fatti con tiri da 3 e 2 ad Intero
-      var puntiTiriDa3ConPerScelta = parseInt(statistiche.punteggioPartita / 100 * percentualeTiriDa3Casuale);
-      var tiriDa2Sottratti = statistiche.punteggioPartita - puntiTiriDa3ConPerScelta;
-
-      if (puntiTiriDa3ConPerScelta % 3 == 0) {
-        if (tiriDa2Sottratti % 2 == 0) {
-          statisticaCreata = true;
-        }
-      }
-    }
-
-    //Assegnazione parametri generati
-    statistiche.tiriDa3Riusciti = puntiTiriDa3ConPerScelta / 3;
-    statistiche.tiriDa2Riusciti = tiriDa2Sottratti / 2;
-    statistiche.puntiConTiriDa3Riusciti = puntiTiriDa3ConPerScelta;
-    statistiche.puntiConTiriDa2Riusciti = tiriDa2Sottratti ;
-    statistiche.percentualeTiriDa3InPartita = percentualeTiriDa3Casuale + '%';
-    statistiche.percentualeTiriDa2InPartita = (100 - percentualeTiriDa3Casuale) + '%';
-
-    return statistiche;
-  }
-});
+}
